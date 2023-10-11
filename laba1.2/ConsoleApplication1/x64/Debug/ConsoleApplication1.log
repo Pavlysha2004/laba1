@@ -1,0 +1,4 @@
+﻿  ConsoleApplication1.cpp
+H:\подарок\лэти\асид (кислота)\лабы\ConsoleApplication1\ConsoleApplication1\list.h(212): warning C4715: list<int>::operator[]: значение возвращается не при всех путях выполнения
+H:\подарок\лэти\асид (кислота)\лабы\ConsoleApplication1\ConsoleApplication1\Stek.h(147): warning C4715: Stek<char>::operator[]: значение возвращается не при всех путях выполнения
+  ConsoleApplication1.vcxproj -> H:\подарок\лэти\асид (кислота)\лабы\ConsoleApplication1\x64\Debug\ConsoleApplication1.exe
