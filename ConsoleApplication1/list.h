@@ -208,6 +208,7 @@ T& list<T>::operator[](const int index)
 		current = current->pNext;
 		counter++;
 	}
+
 }
 
 #endif

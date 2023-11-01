@@ -1,5 +1,7 @@
 #pragma once
-
+#include <iostream>
+#include <string>
+using namespace std;
 
 template<typename T>
 class DynamicArray {
@@ -39,20 +41,142 @@ private:
         
     }
 public:
-    DynamicArray(int init = 10) {
+    DynamicArray(int init = 10) 
+    {
         arr = new T[init]{};
         lenght = 0;
         capacity = init;
     }
 
     ~DynamicArray();
-
+    
     void push_back(T);
     void push_front(T);
     void add(T, int);
     void remove(int);
     void reduction(int); //сокращает параметр размера длины, если того требуется разарботчику, например чтобы не выводились ненужные нули массива
-    
+    friend ostream& operator<< (ostream& os, DynamicArray<T>& mass)
+    {
+        for (int i = 0; i < mass.size(1); i++)
+        {
+            os << mass[i] << " ";
+        }
+        return os;
+    }
+
+    DynamicArray<T>& operator= (const DynamicArray<T>& mass)
+    {
+        if (this == &mass)
+            return *this;
+
+        delete[] arr;
+
+        lenght = mass.lenght;
+        capacity = mass.capacity;
+        arr = new T[capacity];
+
+        for (int i = 0; i < lenght; i++)
+        {
+            arr[i] = mass.arr[i];
+        }
+
+        return *this;
+    }
+
+    DynamicArray<T>& operator= (const string& mass)
+    {
+        lenght = 0;
+        delete[] arr;
+        int i = 2;
+        capacity = 10;
+        while (true)
+        {
+            if (mass.size() > capacity)
+            {
+                capacity = 10 * i++;
+            }
+            else
+            {
+                break;
+            }
+        }
+        arr = new T[capacity];
+        if (is_same<T, char>::value)
+        {
+
+            for (int i = 0; i < mass.size(); i++)
+            {
+                arr[i] = mass[i];
+            }
+            lenght = mass.size();
+        }
+        else if (is_same<T, int>::value)
+        {
+            int j = 0;
+            for (int i = 0; i < mass.size(); i++)
+            {
+                if (mass[i] >= '0' && mass[i] <= '9')
+                {
+                    if (i + 1 < mass.size())
+                    {
+                        if (mass[i + 1] >= '0' && mass[i + 1] <= '9')
+                        {
+                            char* mass_t = new char[capacity];
+                            int g = i;
+                            int r = 0;
+                            while (mass[g + 1] >= '0' && mass[g + 1] <= '9')
+                            {
+                                mass_t[r] = mass[g];
+                                g++;
+                                r++;
+                                if (g + 1 >= mass.size())
+                                    break;
+                            }
+                            mass_t[r] = mass[g];
+                            arr[j] = 0;
+                            for (int t = 0; t <= r; t++)
+                            {
+                                arr[j] = arr[j] * 10 + (mass_t[t] - '0');
+                            }
+                            j++;
+                            lenght++;
+                            i = g;
+                            delete mass_t;
+                        }
+                        else
+                        {
+                            arr[j] = mass[i] - '0';
+                            j++;
+                            lenght++;
+                        }
+                    }
+                    else
+                    {
+                        arr[j] = mass[i] - '0';
+                        j++;
+                        lenght++;
+                    }
+                }
+            }
+            capacity = 10;
+            i = 2;
+            while (true)
+            {
+                if (lenght > capacity)
+                {
+                    capacity = 10 * i++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+        return *this;
+    }
+
+
+
     int size(bool);
     T& operator[] (int const);
 

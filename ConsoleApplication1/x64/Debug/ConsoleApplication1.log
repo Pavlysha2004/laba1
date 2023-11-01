@@ -1,0 +1,6 @@
+﻿  ConsoleApplication1.cpp
+H:\подарок\лэти\асид (кислота)\лабы\laba1.2\ConsoleApplication1\dinMass.h(111,31): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+H:\подарок\лэти\асид (кислота)\лабы\laba1.2\ConsoleApplication1\dinMass.h(86,22): message : во время компиляции функции-члена класс шаблон "DynamicArray<int> &DynamicArray<int>::operator =(const std::string &)"
+H:\подарок\лэти\асид (кислота)\лабы\laba1.2\ConsoleApplication1\ConsoleApplication1.cpp(228,13): message : см. первую ссылку на "DynamicArray<int>::operator =" в "main"
+H:\подарок\лэти\асид (кислота)\лабы\laba1.2\ConsoleApplication1\ConsoleApplication1.cpp(23,23): message : выполняется компиляция ссылки на экземпляр класс шаблон функции "DynamicArray<int>"
+  ConsoleApplication1.vcxproj -> H:\подарок\лэти\асид (кислота)\лабы\laba1.2\x64\Debug\ConsoleApplication1.exe

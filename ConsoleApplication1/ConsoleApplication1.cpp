@@ -2,148 +2,238 @@
 #include"dinMass.h"
 #include<iostream>
 #include"Stek.h"
+#include<string>
 using namespace std;
+
+int MinRunGet(int n)
+{
+    int r = 0;
+    while (n >= 64)
+    {
+        r |= (n & 1);
+        n >>= 1;
+    }
+    return n + r;
+}
+
+void Sort_ins(DynamicArray<int>& mass, int left, int right)
+{
+   for (int i = left + 1; i <= right; i++) 
+   {
+      int max = mass[i];
+      int g = i - 1;
+      while (g >= left && max < mass[g]) 
+      {
+          mass[g + 1] = mass[g];
+          mass[g] = max;
+          g = g - 1;
+      }
+   }
+}
+
+
+
+void merge(DynamicArray<int>& mass, int l, int m, int r)
+{
+    int* Left = new int[m - l + 1];
+    int* Right = new int[r - m];
+    for (int i = 0; i < m - l + 1; i++)
+        Left[i] = mass[l + i]; 
+    for (int i = 0; i < r - m; i++)
+        Right[i] = mass[m + 1 + i];
+    int i = 0, j = 0, k = l, testL = 0, testR = 0;
+    while (i < m - l + 1 && j < r - m)
+    {
+        if (Left[i] <= Right[j]) {
+            mass[k] = Left[i];
+            i++;
+            testL++;
+            testR = 0;
+        }
+        else {
+            mass[k] = Right[j];
+            j++;
+            testR++;
+            testL = 0;
+        }
+        k++;
+    }
+
+    if (testL >= 7)
+    {
+        int gallopStep = 1;
+        bool col_mass_bro = 1;
+        for (int g = i; g < m - l + 1;)
+        {
+            if (Left[g] <= Right[j])
+            {
+                g += gallopStep;
+                gallopStep *= 2;
+            }
+            else
+            {
+                col_mass_bro = 0;
+                testL = 0;
+                testR = 0;
+            }
+        }
+        if (col_mass_bro)
+        {
+            for (int g = 0; g < m - l + 1; g++)
+            {
+                mass[k] = Left[g];
+                k++;
+                i++;
+                testL = 0;
+                testR = 0;
+            }
+        }
+    }
+    else if (testR >= 7)
+    {
+        int gallopStep = 1;
+        bool col_mass_bro = 1;
+        for (int g = i; g < r - m;)
+        {
+            if (Right[g] <= Left[i])
+            {
+                g += gallopStep;
+                gallopStep *= 2;
+            }
+            else
+            {
+                col_mass_bro = 0;
+                testL = 0;
+                testR = 0;
+            }
+        }
+        if (col_mass_bro)
+        {
+            for (int g = 0; g < r - m; g++)
+            {
+                mass[k] = Left[g];
+                k++;
+                j++;
+                testL = 0;
+                testR = 0;
+            }
+        }
+    }
+
+
+
+    while (i < m - l + 1) 
+    {
+        mass[k] = Left[i];
+        i++;
+        k++;
+    }
+
+    while (j < r - m) 
+    {
+        mass[k] = Right[j];
+        j++;
+        k++;
+    }
+}
+
+int min(int x, int y)
+{
+    if (x > y)
+        return y;
+    else
+        return x;
+}
+
+void swap(int& a, int& b)
+{
+    a = a ^ b;
+    b = a ^ b;
+    a = a ^ b;
+}
+
+void Timsort(DynamicArray<int>& mass, int n)
+{
+    int MinRun = MinRunGet(n);
+    for (int i = 0; i < n; i += MinRun)
+    {
+        int min_num = min(i + MinRun - 1, n - 1);
+        int min_num2 = min_num;
+        for (int g = i; g < min_num2; g++)
+        {
+            if (mass[g] > mass[g + 1])
+            {
+                min_num--;
+            }
+            
+        }
+        if (min_num != 0)
+            Sort_ins(mass, i, min_num2); // min тут для того, чтобы за границы массива не вылетить
+        else
+        {
+            min_num = min(i + MinRun, n);
+            for (int g = i; g < min_num / 2; g++)
+            {
+                swap(mass[g], mass[min_num2]);
+                min_num2--;
+            }
+        }
+    }   
+    for (int size = MinRun; size < n; size = 2 * size) 
+    {
+        for (int left = 0; left < n - size; left += 2 * size) 
+        {
+            int mid = left + size - 1;
+            int right = min((left + 2 * size - 1), (n - 1));
+            merge(mass, left, mid, right);
+        }
+    }
+}
+
+int interface_for_tim()
+{
+    cout << "Что делаем? (для выбора ввидите число)";
+    cout << "\n1.Создать автоматически массив из рамндомных значений заданного размера";
+    cout << "\n2.Ввести собственные значения (через пробел)";
+    cout << "\nНомер варианта: ";
+    int g;
+    cin >> g;
+    return g;
+}
 
 int main()
 {
 
     setlocale(LC_CTYPE, "Russian");
-    cout << "реализация стека:";
-    Stek<int> lol;
-    lol.push(5);
-    lol.push(8);
-    lol.push(9);
-    lol.push(53);
-    lol.push(12);
-    lol.push(555);
-    lol.push(125);
-    lol.push(9999);
-    cout << "\nРазмер: " << lol.size();
-    cout << "\nПоложили символы в стек: ";
-    for (int i = 0; i < lol.size(); i++)
+    DynamicArray<int> lol;
+    switch (interface_for_tim())
     {
-        cout << lol[i] << " " ;
-    }
-    lol.pop();
-    lol.pop();
-    cout << "\nsize: " << lol.size();
-    cout << "\nУбрали два символа из стека: ";
-    for (int i = 0; i < lol.size(); i++)
+    case 1:
     {
-        cout << lol[i] << " ";
+        cout << "Количество элементов массива: ";
+        int k;
+        cin >> k;
+        for (int i = 0; i < k; i++)
+        {
+            lol.push_back(rand());
+        }
+        break;
     }
-
-    cout << "\n\nPeaлизация списка:";
-    list<int> lol2;
-    lol2.push_back(5);
-    lol2.push_back(8);
-    lol2.push_back(9);
-    lol2.push_back(53);
-    lol2.push_back(12);
-    lol2.push_back(555);
-    lol2.push_back(125);
-    lol2.push_back(9999);
-    cout << "\nРазмер: " << lol2.size();
-    cout << "\nПоложили символы в конец списка: ";
-    for (int i = 0; i < lol2.size(); i++)
+    case 2:
     {
-        cout << lol2[i] << " ";
+        cout << "Введите выражение: ";
+        string expression;
+        cin >> expression;
+        getline(cin, expression);
+        lol = expression;
+        break;
     }
-    
-    lol2.push_front(666);
-    lol2.push_front(321);
-    lol2.push_front(8);
-    
-    
-    cout << "\nРазмер: " << lol2.size();
-    cout << "\nПоложили символы в начало списка: ";
-    for (int i = 0; i < lol2.size(); i++)
-    {
-        cout << lol2[i] << " ";
+    default:
+        break;
     }
-    
-    lol2.add(5598, 4);
-    
-    cout << "\nРазмер: " << lol2.size();
-    cout << "\nПоложили символ 5598 на позицию 4: ";
-    for (int i = 0; i < lol2.size(); i++)
-    {
-        cout << lol2[i] << " ";
-    }
-    
-    lol2.remove(4);
-    
-    cout << "\nРазмер: " << lol2.size();
-    cout << "\nУдалилти символ с позиции 4: ";
-    for (int i = 0; i < lol2.size(); i++)
-    {
-        cout << lol2[i] << " ";
-    }
-
-    cout << "\n\nPeaлизация динамического массива:";
-    DynamicArray<int> lol3;
-    lol3.push_back(5);
-    lol3.push_back(8);
-    lol3.push_back(9);
-    lol3.push_back(53);
-    lol3.push_back(12);
-    lol3.push_back(555);
-    lol3.push_back(125);
-    lol3.push_back(9999);
-
-    cout << "\nРазмер общий: " << lol3.size(0);
-    cout << "\nкол-во символов (lenght): " << lol3.size(1);
-    cout << "\nпоместили символы в конец массива: ";
-    for (int i = 0; i < lol3.size(1); i++)
-    {
-        cout << lol3[i] << " ";
-    }
-
-    lol3.add(12348, 6);
-    lol3.add(65321, 0);
-    lol3.add(8989, 15);
-
-    cout << "\nРазмер общий: " << lol3.size(0);
-    cout << "\nкол-во символов (lenght): " << lol3.size(1);
-    cout << "\nпоместили символы на позиции 6 0 и 15: ";
-    for (int i = 0; i < lol3.size(1); i++)
-    {
-        cout << lol3[i] << " ";
-    }
-
-    lol3.push_front(85);
-    lol3.push_front(12);
-    lol3.push_front(19);
-
-    cout << "\nРазмер общий: " << lol3.size(0);
-    cout << "\nкол-во символов (lenght): " << lol3.size(1);
-    cout << "\nпоместили символы в начало массива: ";
-    for (int i = 0; i < lol3.size(1); i++)
-    {
-        cout << lol3[i] << " ";
-    }
-
-    lol3.remove(0);
-    lol3.remove(17);
-    lol3.remove(35);
-
-    cout << "\nРазмер общий: " << lol3.size(0);
-    cout << "\nкол-во символов (lenght): " << lol3.size(1);
-    cout << "\nУдалили символы на позициях 0, 17 и 35(ничего не произойдёт): ";
-    for (int i = 0; i < lol3.size(1); i++)
-    {
-        cout << lol3[i] << " ";
-    }
-    lol3.reduction(3); //отдельная функция нужна, если вдруг разработчик захочет оставить эти нули после числа, то их можно не удалять, а если не нужны, можно просто сократить размер массива 
-    cout << "\nРазмер общий: " << lol3.size(0);
-    cout << "\nкол-во символов (lenght): " << lol3.size(1);
-    cout << "\nТак как у нас были лишние пустые значения забитые нулями, мы сократим с помощью специальной функции длинну массива: ";
-    for (int i = 0; i < lol3.size(1); i++)
-    {
-        cout << lol3[i] << " ";
-    }
-
-    cout << "\n\n\n";
+    cout << "Готовый массив: ";
+    Timsort(lol, lol.size(1));
+    cout << lol;
     return 0;
 }
 

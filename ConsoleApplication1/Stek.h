@@ -117,7 +117,7 @@ template<typename T>
 int Stek<T>::size()
 {
 	int counte = 0;
-	Node<T>* current = this->head;
+	Node<T>* current = head;
 	while (current->pNext != nullptr)
 	{
 		current = current->pNext;
