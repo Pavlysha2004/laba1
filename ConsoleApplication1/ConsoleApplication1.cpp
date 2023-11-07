@@ -59,7 +59,7 @@ void merge(DynamicArray<int>& mass, int l, int m, int r)
         k++;
     }
 
-    if (testL >= 7)
+    if (testL >= 7)  //галоп начинается тут, после того как из массива Left были взяты 7 раз элементы
     {
         int gallopStep = 1;
         bool col_mass_bro = 1;
@@ -89,7 +89,7 @@ void merge(DynamicArray<int>& mass, int l, int m, int r)
             }
         }
     }
-    else if (testR >= 7)
+    else if (testR >= 7) //галоп начинается тут, после того как из массива Right были взяты 7 раз элементы
     {
         int gallopStep = 1;
         bool col_mass_bro = 1;
