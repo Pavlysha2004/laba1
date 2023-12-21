@@ -17,8 +17,10 @@ struct Edge // для списка смежности
 struct SmezList //сам список смежности
 {
     DynamicArray<Edge> GraphList;
+    DynamicArray<string> spis_ver;
     int number_ver = 0;
     void addSmezList_from_matrixSmez(string);
+    void indentMatrixOut();
     void merge(int p, int q, int r);
     void mergeSort(int p, int r);
     DynamicArray<strPair> strTop();

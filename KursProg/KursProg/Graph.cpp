@@ -4,7 +4,6 @@
 
 void SmezList::addSmezList_from_matrixSmez(string str)
 {
-    DynamicArray<string> spis_ver;
     int col = 0, row = 0, col_vo_ver = 0;
     bool firstCol = 1;
     string str2, str3;
@@ -45,7 +44,7 @@ void SmezList::addSmezList_from_matrixSmez(string str)
             number = stoi(str3);
             str3.clear();
         }
-        if (col > col_vo_ver)
+        if (col > col_vo_ver || row > col_vo_ver)
         {
             cout << "Ошибка ввода";
             return;
@@ -68,6 +67,7 @@ void SmezList::addSmezList_from_matrixSmez(string str)
             }
             if (go_Graph)
                 GraphList.push_back(smezNode);
+            
 
         }
         if (str[i] == '\n')
@@ -79,6 +79,22 @@ void SmezList::addSmezList_from_matrixSmez(string str)
             else row++;
             col = 0;
         }
+    }
+}
+
+void SmezList::indentMatrixOut()
+{  
+    for (int i = 0; i < spis_ver.size(1); i++)
+    {
+        cout << spis_ver[i] << " ";
+        for (int h = 0; h < GraphList.size(1); h++)
+        {
+            if (GraphList[h].to == spis_ver[i] || GraphList[h].from == spis_ver[i])
+                cout << "1 ";
+            else
+                cout << "0 ";
+        }
+        cout << endl;        
     }
 }
 

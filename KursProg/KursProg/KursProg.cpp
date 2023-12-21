@@ -27,7 +27,10 @@ int main()
     {
         cout << arr.GraphList[i].to << " " << arr.GraphList[i].from << " " << arr.GraphList[i].weight << endl;
     }
-
+    cout << endl;
+    cout << "Матрица индентности:";
+    cout << endl;
+    arr.indentMatrixOut();
     Graph MyG(arr.number_ver + 1);
     MyG.kruskal(arr);
     cout << "\nОбход полученного графа в ширину (Начиная с элемента D):\n";
